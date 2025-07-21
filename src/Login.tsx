@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./App.css";
 
 function Login() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="w-full h-full">
@@ -31,7 +33,12 @@ function Login() {
               className="border border-gray-600 rounded p-2 mb-4"
             />
             <button className=" text-black rounded p-2 w-30 mb-5">Login</button>
-            <button className=" text-black rounded p-2 w-30">Sign Up</button>
+            <button
+              className=" text-black rounded p-2 w-30"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </button>
           </div>
         </div>
       </div>

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./App.css";
 
-function Login() {
+function Signup() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="w-full h-full">
@@ -16,7 +18,7 @@ function Login() {
         </div>
 
         <div className="flex flex-col gap-10 justify-center items-center h-full">
-          <h2 className="text-3xl"> Login</h2>
+          <h2 className="text-3xl"> Sign Up</h2>
           <div className="flex flex-col justify-center items-center">
             <label htmlFor="username">Username</label>
             <input
@@ -30,8 +32,15 @@ function Login() {
               id="password"
               className="border border-gray-600 rounded p-2 mb-4"
             />
-            <button className=" text-black rounded p-2 w-30 mb-5">Login</button>
-            <button className=" text-black rounded p-2 w-30">Sign Up</button>
+            <button className=" text-black rounded p-2 w-30 mb-5">
+              Sign Up
+            </button>
+            <button
+              className=" text-black rounded p-2 w-30"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
           </div>
         </div>
       </div>
@@ -39,4 +48,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
