@@ -3,28 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-import "./App.css";
+import "../App.css";
 
-function Login() {
+function Signup() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [emailAddress, setEmailAddress] = useState("");
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (loginUser: { username: string; password: string }) =>
+    mutationFn: (newUser: {
+      username: string;
+      password: string;
+      emailAddress: string;
+    }) =>
       axios.post(
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/login",
-        loginUser,
-        {
-          withCredentials: true,
-        }
+        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/users",
+        newUser
       ),
-
-    onSuccess: (data) => {
-      const parsedBody = JSON.parse(data.data.body);
-      localStorage.setItem("PK", parsedBody.PK);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
@@ -42,7 +42,7 @@ function Login() {
         </div>
 
         <div className="flex flex-col gap-10 justify-center items-center h-full">
-          <h2 className="text-3xl"> Login</h2>
+          <h2 className="text-3xl"> Sign Up</h2>
           <div className="flex flex-col justify-center items-center">
             <label htmlFor="username">Username</label>
             <input
@@ -58,17 +58,26 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               className="border border-gray-600 rounded p-2 mb-4"
             />
+
+            <label htmlFor="emailAddress">Email Address</label>
+            <input
+              id="emailAddress"
+              onChange={(e) => setEmailAddress(e.target.value)}
+              className="border border-gray-600 rounded p-2 mb-4"
+            />
             <button
               className=" text-black rounded p-2 w-30 mb-5"
-              onClick={() => mutation.mutate({ username, password })}
+              onClick={() =>
+                mutation.mutate({ username, password, emailAddress })
+              }
             >
-              Login
+              Sign Up
             </button>
             <button
               className=" text-black rounded p-2 w-30"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/login")}
             >
-              Sign Up
+              Login
             </button>
           </div>
         </div>
@@ -77,4 +86,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
