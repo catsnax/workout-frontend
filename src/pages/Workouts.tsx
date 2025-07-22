@@ -64,6 +64,12 @@ function Workout() {
                 </td>
                 <td className="border px-4 py-2">{workout.targetDay.S}</td>
                 <td className="border px-4 py-2">{workout.location.S}</td>
+                <td>
+                  <button className="text-black text-xs w-full p-4 m-2">
+                    {" "}
+                    View
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
