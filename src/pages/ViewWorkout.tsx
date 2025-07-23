@@ -4,6 +4,7 @@ import { useModalStore } from "../store/modalStore";
 import AddExerciseForm from "../components/AddExerciseForm";
 import { useQuery } from "@tanstack/react-query";
 import WorkoutCard from "../components/ExerciseCard.tsx";
+import useGetRequest from "../hooks/useGetRequest.ts";
 
 function ViewWorkout() {
   const open = useModalStore((state) => state.open);
@@ -12,22 +13,16 @@ function ViewWorkout() {
     open(<AddExerciseForm SK={sharedData?.SK} />);
   };
 
-  const fetchExercises = async (pk: string) => {
-    const res = await fetch(
-      `https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises?pk=${encodeURIComponent(
-        sharedData?.SK
-      )}`
-    );
-    if (!res.ok) throw new Error("Failed to fetch exercises");
-    const data = await res.json();
-    return data;
-  };
-
   const { data, isLoading, error } = useQuery({
     queryKey: ["exercises", sharedData?.SK],
-    queryFn: () => fetchExercises(sharedData?.SK),
+    queryFn: () =>
+      useGetRequest(
+        sharedData?.SK,
+        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises"
+      ),
     enabled: !!sharedData?.SK,
   });
+
   if (!isLoading) {
     data.body = JSON.parse(data.body);
     console.log(data.body);

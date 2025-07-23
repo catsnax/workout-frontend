@@ -8,8 +8,6 @@ type AddExerciseFormProps = {
 
 export default function AddExerciseForm({ SK }: AddExerciseFormProps) {
   const queryClient = useQueryClient();
-  console.log(SK);
-
   const mutation = useMutation({
     mutationFn: (newWorkout: {
       PK: string;
