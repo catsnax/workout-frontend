@@ -1,13 +1,24 @@
-import Modal from "../components/modal.tsx";
+import Modal from "../components/Modal.tsx";
 import { useModalStore } from "../store/modalStore";
-import { useState } from "react";
+import { useDataStore } from "../store/dataStore";
 import AddWorkoutForm from "../components/AddWorkoutForm";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import type { Workout } from "../types/WorkoutType.ts";
 
 function Workout() {
   const open = useModalStore((state) => state.open);
   const handleAddWorkout = () => {
     open(<AddWorkoutForm />);
+  };
+
+  const setSharedData = useDataStore((state) => state.setSharedData);
+  setSharedData({ SK: "hello" });
+
+  const navigate = useNavigate();
+  const handleNavigate = (body: Workout) => {
+    setSharedData(body);
+    navigate("/view-workout");
   };
 
   const pk = localStorage.getItem("PK");
@@ -65,8 +76,17 @@ function Workout() {
                 <td className="border px-4 py-2">{workout.targetDay.S}</td>
                 <td className="border px-4 py-2">{workout.location.S}</td>
                 <td>
-                  <button className="text-black text-xs w-full p-4 m-2">
-                    {" "}
+                  <button
+                    className="text-black text-xs w-full p-4 m-2"
+                    onClick={() =>
+                      handleNavigate({
+                        SK: workout.SK.S,
+                        date: workout.date.S,
+                        location: workout.location.S,
+                        targetDay: workout.targetDay.S,
+                      })
+                    }
+                  >
                     View
                   </button>
                 </td>

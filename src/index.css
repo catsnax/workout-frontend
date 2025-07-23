@@ -53,6 +53,8 @@ button {
   border: 1px solid transparent;
   font-family: "Winky Rough", sans-serif;
   background-color: #f9f9f9;
+  color: black;
+  padding: 0.5em 1em;
 }
 button:hover {
   background-color: #333;
