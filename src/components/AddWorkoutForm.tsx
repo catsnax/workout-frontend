@@ -42,9 +42,9 @@ export default function AddWorkoutForm() {
         value={targetDay}
         onChange={(e) => setTargetDay(e.target.value)}
       >
-        <option value="full">Full Body</option>
-        <option value="upper">Upper Body</option>
-        <option value="lower">Lower Body</option>
+        <option value="Full Body">Full Body</option>
+        <option value="Upper Day">Upper Body</option>
+        <option value="Lower Day">Lower Body</option>
         <option value="Push">Push</option>
         <option value="Pull">Pull</option>
         <option value="Legs">Legs</option>
