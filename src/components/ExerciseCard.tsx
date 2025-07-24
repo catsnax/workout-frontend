@@ -4,6 +4,7 @@ type WorkoutCardProps = {
   weight: string;
   unitMeasurement: string;
   PK: string;
+  workout: string;
 };
 
 import { useState, useEffect } from "react";
@@ -11,13 +12,15 @@ import { useQuery } from "@tanstack/react-query";
 import useGetRequest from "../hooks/useGetRequest";
 import usePostRequest from "../hooks/usePostRequest";
 import usePatchRequest from "../hooks/usePatchRequest";
+import useDeleteRequest from "../hooks/useDeleteRequest";
 
-export default function WorkoutCard({
+export default function ExerciseCard({
   exerciseName,
   sets,
   weight,
   unitMeasurement,
   PK,
+  workout,
 }: WorkoutCardProps) {
   type NewSet = {
     PK: string;
@@ -34,6 +37,11 @@ export default function WorkoutCard({
     ["sets"]
   );
 
+  const deleteExercise = useDeleteRequest<{ pk: string; sk: string }>(
+    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises",
+    ["exercises"]
+  );
+
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing(!isEditing);
 
@@ -45,7 +53,6 @@ export default function WorkoutCard({
         "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets"
       );
       return { ...response, body: JSON.parse(response.body) };
-      setRepsInputs(response.body.map((set: any) => set.numberOfReps.S));
     },
   });
 
@@ -82,6 +89,16 @@ export default function WorkoutCard({
     });
   };
 
+  const handleDelete = () => {
+    console.log(workout);
+    console.log(PK);
+
+    deleteExercise.mutate({
+      pk: workout,
+      sk: PK,
+    });
+  };
+
   const [repsInputs, setRepsInputs] = useState<string[]>(
     Array.from({ length: sets }, () => "")
   );
@@ -91,15 +108,25 @@ export default function WorkoutCard({
   ) : (
     <div className="p-4 max-w-md mx-auto">
       <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full w-full relative">
-        <button
-          className="sticky top-0 right-0 ml-auto bg-white z-10 px-4 py-2 rounded shadow"
-          onClick={toggleEdit}
+        <h2
+          className="text-red-900 absolute top-4 right-4 cursor-pointer"
+          onClick={handleDelete}
         >
-          Edit Reps
-        </button>
+          Delete
+        </h2>
         <h3 className="text-xl font-semibold mb-4 text-gray-800">
           {exerciseName}
         </h3>
+        {data.body.length == 0 ? (
+          <></>
+        ) : (
+          <h2
+            className=" ml-auto  px-4 py-2 absolute text-green-900 top-2 left-4 cursor-pointer"
+            onClick={toggleEdit}
+          >
+            Edit
+          </h2>
+        )}
 
         <div className="overflow-x-auto">
           <table className="min-w-full w-1/2 text-sm text-left text-gray-700">

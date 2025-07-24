@@ -3,7 +3,7 @@ import Modal from "../components/Modal.tsx";
 import { useModalStore } from "../store/modalStore";
 import AddExerciseForm from "../components/AddExerciseForm";
 import { useQuery } from "@tanstack/react-query";
-import WorkoutCard from "../components/ExerciseCard.tsx";
+import ExerciseCard from "../components/ExerciseCard.tsx";
 import useGetRequest from "../hooks/useGetRequest.ts";
 import { useNavigate } from "react-router-dom";
 
@@ -38,13 +38,14 @@ function ViewWorkout() {
       <Modal />
       <div className="flex">
         {data.body.map((exercise: any, index: any) => (
-          <WorkoutCard
+          <ExerciseCard
             key={index}
             exerciseName={exercise.exerciseName.S}
             sets={parseInt(exercise.numberOfSets.S)}
             weight={exercise.weight.S}
             unitMeasurement={exercise.unitMeasurement.S}
             PK={exercise.SK.S}
+            workout={exercise.PK.S}
           />
         ))}
       </div>
