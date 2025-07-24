@@ -50,9 +50,11 @@ export default function WorkoutCard({
   });
 
   useEffect(() => {
-    if (data?.body?.length > 0) {
-      const newInputs = data.body.map((set: any) => set.numberOfReps.S);
-      setRepsInputs(newInputs);
+    if (!isLoading) {
+      if (data.body.length > 0) {
+        const newInputs = data.body.map((set: any) => set.numberOfReps.S);
+        setRepsInputs(newInputs);
+      }
     }
   }, [data]);
 
@@ -88,7 +90,7 @@ export default function WorkoutCard({
     <div> Loading..</div>
   ) : (
     <div className="p-4 max-w-md mx-auto">
-      <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full relative">
+      <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full w-full relative">
         <button
           className="sticky top-0 right-0 ml-auto bg-white z-10 px-4 py-2 rounded shadow"
           onClick={toggleEdit}
