@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useModalStore } from "../store/modalStore";
 
 type AddExerciseFormProps = {
   SK: string;
 };
 
 export default function AddExerciseForm({ SK }: AddExerciseFormProps) {
+  const { close } = useModalStore();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (newWorkout: {
@@ -22,6 +24,7 @@ export default function AddExerciseForm({ SK }: AddExerciseFormProps) {
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["exercises"] });
+      close();
     },
   });
 
@@ -56,12 +59,17 @@ export default function AddExerciseForm({ SK }: AddExerciseFormProps) {
         value={exerciseName}
         onChange={(e) => setExerciseName(e.target.value)}
       />
-      <input
+      <select
         className="border-2 p-2 border-black text-black mb-2 w-1/2"
-        placeholder="Number of Sets"
         value={numberOfSets}
         onChange={(e) => setNumberOfSets(e.target.value)}
-      />
+      >
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
       <div className="flex justify-between w-1/2 mb-2 gap-2">
         <input
           className="border-2 p-2 h-12 border-black text-black mb-2 w-1/2"

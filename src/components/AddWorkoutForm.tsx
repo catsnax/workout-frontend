@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useModalStore } from "../store/modalStore";
 
 export default function AddWorkoutForm() {
   const queryClient = useQueryClient();
+  const { close } = useModalStore();
 
   const mutation = useMutation({
     mutationFn: (newWorkout: {
@@ -18,6 +20,7 @@ export default function AddWorkoutForm() {
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["workouts"] });
+      close();
     },
   });
 
