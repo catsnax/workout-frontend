@@ -14,9 +14,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-h2 {
+h1 {
   font-family: "Special Gothic Expanded One", sans-serif;
-  font-weight: 400;
+  font-weight: 800;
   font-style: normal;
   margin: 0;
 }
@@ -31,35 +31,20 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+  background: linear-gradient(135deg, #111010, #0d0d0d);
   color: white;
   height: 100vh;
-  margin: 0;
   font-family: sans-serif;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
   border-radius: 4px;
   border: 1px solid transparent;
   font-family: "Winky Rough", sans-serif;
-  background-color: #f9f9f9;
-  color: black;
-  padding: 0.5em 1em;
 }
-button:hover {
-  background-color: #333;
-  border-color: #666;
-}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
