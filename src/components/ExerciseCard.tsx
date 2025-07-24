@@ -7,10 +7,10 @@ type WorkoutCardProps = {
 };
 
 import { useState } from "react";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import useGetRequest from "../hooks/useGetRequest";
 import usePostRequest from "../hooks/usePostRequest";
+import usePatchRequest from "../hooks/usePatchRequest";
 
 export default function WorkoutCard({
   exerciseName,
@@ -29,6 +29,13 @@ export default function WorkoutCard({
     "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets",
     ["sets"]
   );
+  const patchSet = usePatchRequest<NewSet>(
+    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets",
+    ["sets"]
+  );
+
+  const [isEditing, setIsEditing] = useState(false);
+  const toggleEdit = () => setIsEditing(!isEditing);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["exercises", PK],
@@ -40,10 +47,22 @@ export default function WorkoutCard({
     enabled: !!PK,
   });
 
-  const handleSave = () => {
+  const handlePostSave = () => {
     repsInputs.forEach((reps, index) => {
       if (!reps) return;
       createSet.mutate({
+        PK,
+        SK: `SET#${index + 1}`,
+        numberOfReps: reps,
+        weight,
+      });
+    });
+  };
+
+  const handlePatchSave = () => {
+    repsInputs.forEach((reps, index) => {
+      if (!reps) return;
+      patchSet.mutate({
         PK,
         SK: `SET#${index + 1}`,
         numberOfReps: reps,
@@ -64,7 +83,13 @@ export default function WorkoutCard({
     <div> Loading..</div>
   ) : (
     <div className="p-4 max-w-md mx-auto">
-      <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full">
+      <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full relative">
+        <button
+          className="sticky top-0 right-0 ml-auto bg-white z-10 px-4 py-2 rounded shadow"
+          onClick={toggleEdit}
+        >
+          Edit Reps
+        </button>
         <h3 className="text-xl font-semibold mb-4 text-gray-800">
           {exerciseName}
         </h3>
@@ -106,7 +131,9 @@ export default function WorkoutCard({
             </tbody>
           </table>
           {data.body.length == 0 ? (
-            <button onClick={() => handleSave()}> Save </button>
+            <button onClick={() => handlePostSave()}> Save </button>
+          ) : isEditing ? (
+            <button onClick={() => handlePatchSave()}> Save </button>
           ) : (
             <></>
           )}
