@@ -30,7 +30,7 @@ function ViewWorkout() {
   return isLoading ? (
     <div> Loading..</div>
   ) : (
-    <div className="flex justify-center items-center flex-col p-14 md:p-36 lg:p-56  w-full h-[vw-100]">
+    <div className="flex justify-center items-center flex-col p-14 md:p-36 lg:p-30  w-full h-[vw-100]">
       <h1 className="text-4xl font-bold mb-6">View Workout</h1>
       <nav className="fixed top-8 left-20">
         <h2 onClick={() => navigate("/workout")}> Go Back</h2>

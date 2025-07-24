@@ -68,8 +68,13 @@ export default function ExerciseCard({
   }, [data]);
 
   const handlePostSave = () => {
+    const isAnyEmpty = repsInputs.some((reps) => reps.trim() === "");
+    if (isAnyEmpty) {
+      alert("Please fill in all the reps fields before saving.");
+      return;
+    }
+
     repsInputs.forEach((reps, index) => {
-      if (!reps) return;
       createSet.mutate({
         PK,
         SK: `SET#${index + 1}`,
@@ -77,6 +82,7 @@ export default function ExerciseCard({
         weight,
       });
     });
+    data.body.length += 1;
   };
 
   const handlePatchSave = () => {
@@ -89,6 +95,7 @@ export default function ExerciseCard({
         weight,
       });
     });
+    setIsEditing(false);
   };
 
   const handleDelete = () => {
