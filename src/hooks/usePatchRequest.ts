@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-export default function usePostRequest<T>(
+export default function usePatchRequest<T>(
   url: string,
   invalidateKey?: string[]
 ) {

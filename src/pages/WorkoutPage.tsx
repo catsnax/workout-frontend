@@ -7,8 +7,12 @@ import { useNavigate } from "react-router-dom";
 import type { Workout } from "../types/WorkoutType.ts";
 import useGetRequest from "../hooks/useGetRequest.ts";
 import useDeleteRequest from "../hooks/useDeleteRequest.ts";
+import { useState } from "react";
+import usePatchRequest from "../hooks/usePatchRequest.ts";
 
 function WorkoutPage() {
+  const [targetDay, setTargetDay] = useState("Full Body");
+  const [filteredData, setFilteredData] = useState<any[] | null>(null);
   const open = useModalStore((state) => state.open);
   const handleAddWorkout = () => {
     open(<AddWorkoutForm />);
@@ -32,6 +36,25 @@ function WorkoutPage() {
       pk: pk,
       sk: sk,
     });
+  }
+
+  const filterWorkout = usePatchRequest<{ PK: string; targetDay: string }>(
+    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts",
+    ["workouts"]
+  );
+
+  async function handleFilter(PK: string, targetDay: string) {
+    try {
+      const result = await filterWorkout.mutateAsync({
+        PK: PK,
+        targetDay: targetDay,
+      });
+
+      const parsedBody = JSON.parse(result.data.body);
+      setFilteredData(parsedBody);
+    } catch (err) {
+      console.error("Mutation failed", err);
+    }
   }
 
   const pk = localStorage.getItem("PK");
@@ -68,6 +91,35 @@ function WorkoutPage() {
           >
             Add new workout
           </button>
+          <div>
+            <select
+              value={targetDay}
+              onChange={(event) => setTargetDay(event.target.value)}
+              className="text-white"
+            >
+              <option value="Full Body">Full Body</option>
+              <option value="Upper Day">Upper Body</option>
+              <option value="Lower Day">Lower Body</option>
+              <option value="Push">Push</option>
+              <option value="Pull">Pull</option>
+              <option value="Legs">Legs</option>
+              <option value="Arms">Arms</option>
+            </select>
+            <button
+              onClick={() => handleFilter(pk, targetDay)}
+              className=" mb-4 bg-[#25ab75] px-4 py-2 rounded"
+            >
+              Apply Filter
+            </button>
+            {filteredData && (
+              <button
+                onClick={() => setFilteredData(null)}
+                className="mb-4 bg-gray-500 px-4 py-2 rounded"
+              >
+                Clear Filter
+              </button>
+            )}
+          </div>
         </div>
         <table className="">
           <thead>
@@ -78,7 +130,7 @@ function WorkoutPage() {
             </tr>
           </thead>
           <tbody>
-            {data.body.map((workout: any) => (
+            {(filteredData ?? data.body).map((workout: any) => (
               <tr key={workout.SK.S}>
                 <td className="border px-4 py-2">
                   {new Date(workout.date.S).toLocaleDateString()}
