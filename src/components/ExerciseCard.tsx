@@ -6,7 +6,7 @@ type WorkoutCardProps = {
   PK: string;
 };
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useGetRequest from "../hooks/useGetRequest";
 import usePostRequest from "../hooks/usePostRequest";
@@ -37,7 +37,7 @@ export default function WorkoutCard({
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing(!isEditing);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["exercises", PK],
     queryFn: async () => {
       const response = await useGetRequest(
@@ -45,8 +45,16 @@ export default function WorkoutCard({
         "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets"
       );
       return { ...response, body: JSON.parse(response.body) };
+      setRepsInputs(response.body.map((set: any) => set.numberOfReps.S));
     },
   });
+
+  useEffect(() => {
+    if (data?.body?.length > 0) {
+      const newInputs = data.body.map((set: any) => set.numberOfReps.S);
+      setRepsInputs(newInputs);
+    }
+  }, [data]);
 
   const handlePostSave = () => {
     repsInputs.forEach((reps, index) => {
@@ -105,7 +113,7 @@ export default function WorkoutCard({
                 <tr key={index} className="border-b">
                   <td className="py-2 pr-4">{index + 1}</td>
                   <td className="py-2 pr-4">
-                    {data.body.length == 0 ? (
+                    {data.body.length == 0 || isEditing ? (
                       <input
                         type="number"
                         className="w-16 border border-black rounded-md text-center"
@@ -117,9 +125,7 @@ export default function WorkoutCard({
                         }}
                       />
                     ) : (
-                      <div className="text-center">
-                        {data?.body?.[index]?.numberOfReps?.S ?? "-"}
-                      </div>
+                      <div className="text-center">{repsInputs[index]}</div>
                     )}
                   </td>
                   <td className="py-2">{weight + " " + unitMeasurement}</td>
