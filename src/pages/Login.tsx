@@ -26,6 +26,7 @@ function Login() {
       const parsedBody = JSON.parse(data.data.body);
       localStorage.setItem("PK", parsedBody.PK);
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      navigate("/workout");
     },
   });
 
@@ -62,7 +63,6 @@ function Login() {
               className=" text-black rounded p-2 w-30 mb-5"
               onClick={() => {
                 mutation.mutate({ username, password });
-                navigate("/workout");
               }}
             >
               Login
