@@ -16,7 +16,7 @@ function ViewWorkout() {
 
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["exercises", sharedData?.SK],
     queryFn: async () => {
       const response = await useGetRequest(

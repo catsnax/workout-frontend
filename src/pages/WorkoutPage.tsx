@@ -1,14 +1,14 @@
 import Modal from "../components/Modal.tsx";
-import { useModalStore } from "../store/modalStore";
-import { useDataStore } from "../store/dataStore";
-import AddWorkoutForm from "../components/AddWorkoutForm";
+import { useModalStore } from "../store/modalStore.ts";
+import { useDataStore } from "../store/dataStore.ts";
+import AddWorkoutForm from "../components/AddWorkoutForm.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { Workout } from "../types/WorkoutType.ts";
 import useGetRequest from "../hooks/useGetRequest.ts";
 import useDeleteRequest from "../hooks/useDeleteRequest.ts";
 
-function Workout() {
+function WorkoutPage() {
   const open = useModalStore((state) => state.open);
   const handleAddWorkout = () => {
     open(<AddWorkoutForm />);
@@ -39,7 +39,7 @@ function Workout() {
   if (!pk) {
     return <div>Please log in to view workouts.</div>;
   }
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["workouts", pk],
     queryFn: async () => {
       const response = await useGetRequest(
@@ -115,4 +115,4 @@ function Workout() {
   );
 }
 
-export default Workout;
+export default WorkoutPage;
