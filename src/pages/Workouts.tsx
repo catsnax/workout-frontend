@@ -53,13 +53,18 @@ function Workout() {
   return isLoading ? (
     <div> Loading..</div>
   ) : (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="flex justify-center items-center p-14 md:p-36 lg:p-56  w-full h-[vw-100]">
       <div className="flex flex-col ">
-        <h2 onClick={() => navigate("/login")}> Log Out</h2> <Modal />
+        <nav className="fixed top-8 right-20">
+          <h2 className="text-lg" onClick={() => navigate("/login")}>
+            Log Out
+          </h2>
+        </nav>
+        <Modal />
         <div className="flex flex-col">
           <button
             onClick={handleAddWorkout}
-            className=" mb-4 text-black px-4 py-2 rounded"
+            className=" mb-4 bg-[#25ab75] px-4 py-2 rounded"
           >
             Add new workout
           </button>
@@ -82,7 +87,7 @@ function Workout() {
                 <td className="border px-4 py-2">{workout.location.S}</td>
                 <td className="flex">
                   <button
-                    className="text-black text-xs w-full p-4 m-2"
+                    className="bg-[#25ab75] text-xs w-full p-4 m-2"
                     onClick={() =>
                       handleNavigate({
                         SK: workout.SK.S,
@@ -95,7 +100,7 @@ function Workout() {
                     View
                   </button>
                   <button
-                    className="text-black text-xs w-full p-4 m-2"
+                    className="text-black bg-[#c6315f] text-white text-xs w-full p-4 m-2"
                     onClick={() => handleDelete(workout.PK.S, workout.SK.S)}
                   >
                     Delete

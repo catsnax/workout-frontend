@@ -30,11 +30,12 @@ function ViewWorkout() {
   return isLoading ? (
     <div> Loading..</div>
   ) : (
-    <div className="w-full h-full flex justify-center items-center  flex-col">
-      <h1 className="text-2xl font-bold mb-4">View Workout</h1>
-      <h2 onClick={() => navigate("/workout")}> Go Back</h2>
+    <div className="flex justify-center items-center flex-col p-14 md:p-36 lg:p-56  w-full h-[vw-100]">
+      <h1 className="text-4xl font-bold mb-6">View Workout</h1>
+      <nav className="fixed top-8 left-20">
+        <h2 onClick={() => navigate("/workout")}> Go Back</h2>
+      </nav>
 
-      <button onClick={handleAddExercise}>Add New Exercise</button>
       <Modal />
       <div className="flex">
         {data.body.map((exercise: any, index: any) => (
@@ -49,6 +50,9 @@ function ViewWorkout() {
           />
         ))}
       </div>
+      <button className="bg-[#25ab75] p-3 w-40" onClick={handleAddExercise}>
+        Add New Exercise
+      </button>
     </div>
   );
 }

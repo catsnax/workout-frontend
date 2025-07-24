@@ -107,8 +107,8 @@ export default function ExerciseCard({
   return isLoading ? (
     <div> Loading..</div>
   ) : (
-    <div className="p-4 max-w-md mx-auto">
-      <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full w-full relative">
+    <div className="p-4 max-w-md mx-auto flex flex-col justify-center items-center">
+      <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full w-full relative text-center">
         <Modal />
         <h2
           className="text-red-900 absolute top-4 right-4 cursor-pointer"
@@ -116,7 +116,7 @@ export default function ExerciseCard({
         >
           Delete
         </h2>
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+        <h3 className="text-xl font-semibold mb-4 mt-2 text-gray-800">
           {exerciseName}
         </h3>
         {data.body.length == 0 ? (
@@ -164,9 +164,19 @@ export default function ExerciseCard({
             </tbody>
           </table>
           {data.body.length == 0 ? (
-            <button onClick={() => handlePostSave()}> Save </button>
+            <button
+              className="text-black mt-2 bg-gray-300 rounded-md px-14 h-10"
+              onClick={() => handlePostSave()}
+            >
+              Save
+            </button>
           ) : isEditing ? (
-            <button onClick={() => handlePatchSave()}> Save </button>
+            <button
+              className="text-black mt-2 bg-gray-300 rounded-md px-14 h-10"
+              onClick={() => handlePatchSave()}
+            >
+              Save
+            </button>
           ) : (
             <></>
           )}

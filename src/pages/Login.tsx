@@ -32,19 +32,18 @@ function Login() {
 
   return (
     <>
-      <div className="w-full h-full">
+      <div className="p-14 md:p-36 lg:p-56  w-full h-[vw-100]">
         <link
           href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap"
           rel="stylesheet"
         />
         <div className="flex flex-col justify-center items-center h-full ">
-          <h2 className="text-4xl"> PROVINCIAL FITNESS GYM</h2>
-          <h2 className="text-2xl"> Workout App</h2>
+          <h1 className="text-4xl"> PROVINCIAL FITNESS GYM</h1>
         </div>
 
         <div className="flex flex-col gap-10 justify-center items-center h-full">
-          <h2 className="text-3xl"> Login</h2>
-          <div className="flex flex-col justify-center items-center">
+          <h1 className="text-3xl"> Login</h1>
+          <div className="flex flex-col items-center">
             <label htmlFor="username">Username</label>
             <input
               type="text"
@@ -59,8 +58,9 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               className="border border-gray-600 rounded p-2 mb-4"
             />
+
             <button
-              className=" text-black rounded p-2 w-30 mb-5"
+              className="bg-[#25ab75] p-4 w-32 hover:bg-white hover:text-black mb-6"
               onClick={() => {
                 mutation.mutate({ username, password });
               }}
@@ -68,7 +68,7 @@ function Login() {
               Login
             </button>
             <button
-              className=" text-black rounded p-2 w-30"
+              className="bg-[#25ab75] p-4 w-32 hover:bg-white hover:text-black"
               onClick={() => navigate("/signup")}
             >
               Sign Up
