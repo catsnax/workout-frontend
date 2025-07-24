@@ -13,6 +13,7 @@ import useGetRequest from "../hooks/useGetRequest";
 import usePostRequest from "../hooks/usePostRequest";
 import usePatchRequest from "../hooks/usePatchRequest";
 import useDeleteRequest from "../hooks/useDeleteRequest";
+import Modal from "./Modal.tsx";
 
 export default function ExerciseCard({
   exerciseName,
@@ -28,6 +29,10 @@ export default function ExerciseCard({
     numberOfReps: string;
     weight: string;
   };
+
+  const [isEditing, setIsEditing] = useState(false);
+  const toggleEdit = () => setIsEditing(!isEditing);
+
   const createSet = usePostRequest<NewSet>(
     "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets",
     ["sets"]
@@ -41,9 +46,6 @@ export default function ExerciseCard({
     "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises",
     ["exercises"]
   );
-
-  const [isEditing, setIsEditing] = useState(false);
-  const toggleEdit = () => setIsEditing(!isEditing);
 
   const { data, isLoading } = useQuery({
     queryKey: ["exercises", PK],
@@ -90,9 +92,8 @@ export default function ExerciseCard({
   };
 
   const handleDelete = () => {
-    console.log(workout);
     console.log(PK);
-
+    console.log(workout);
     deleteExercise.mutate({
       pk: workout,
       sk: PK,
@@ -108,6 +109,7 @@ export default function ExerciseCard({
   ) : (
     <div className="p-4 max-w-md mx-auto">
       <div className="bg-white shadow-md rounded-lg p-10 border border-gray-200 h-full w-full relative">
+        <Modal />
         <h2
           className="text-red-900 absolute top-4 right-4 cursor-pointer"
           onClick={handleDelete}
@@ -127,7 +129,6 @@ export default function ExerciseCard({
             Edit
           </h2>
         )}
-
         <div className="overflow-x-auto">
           <table className="min-w-full w-1/2 text-sm text-left text-gray-700">
             <thead className="border-b text-gray-500">

@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { Workout } from "../types/WorkoutType.ts";
 import useGetRequest from "../hooks/useGetRequest.ts";
+import useDeleteRequest from "../hooks/useDeleteRequest.ts";
 
 function Workout() {
   const open = useModalStore((state) => state.open);
@@ -20,6 +21,18 @@ function Workout() {
     setSharedData(body);
     navigate("/view-workout");
   };
+
+  const deleteWorkout = useDeleteRequest<{ pk: string; sk: string }>(
+    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts",
+    ["workouts"]
+  );
+
+  function handleDelete(pk: string, sk: string) {
+    deleteWorkout.mutate({
+      pk: pk,
+      sk: sk,
+    });
+  }
 
   const pk = localStorage.getItem("PK");
 
@@ -67,7 +80,7 @@ function Workout() {
                 </td>
                 <td className="border px-4 py-2">{workout.targetDay.S}</td>
                 <td className="border px-4 py-2">{workout.location.S}</td>
-                <td>
+                <td className="flex">
                   <button
                     className="text-black text-xs w-full p-4 m-2"
                     onClick={() =>
@@ -80,6 +93,12 @@ function Workout() {
                     }
                   >
                     View
+                  </button>
+                  <button
+                    className="text-black text-xs w-full p-4 m-2"
+                    onClick={() => handleDelete(workout.PK.S, workout.SK.S)}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
