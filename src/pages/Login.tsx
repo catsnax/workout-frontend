@@ -60,7 +60,10 @@ function Login() {
             />
             <button
               className=" text-black rounded p-2 w-30 mb-5"
-              onClick={() => mutation.mutate({ username, password })}
+              onClick={() => {
+                mutation.mutate({ username, password });
+                navigate("/workout");
+              }}
             >
               Login
             </button>

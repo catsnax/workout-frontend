@@ -5,6 +5,7 @@ import AddExerciseForm from "../components/AddExerciseForm";
 import { useQuery } from "@tanstack/react-query";
 import WorkoutCard from "../components/ExerciseCard.tsx";
 import useGetRequest from "../hooks/useGetRequest.ts";
+import { useNavigate } from "react-router-dom";
 
 function ViewWorkout() {
   const open = useModalStore((state) => state.open);
@@ -13,26 +14,26 @@ function ViewWorkout() {
     open(<AddExerciseForm SK={sharedData?.SK} />);
   };
 
+  const navigate = useNavigate();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["exercises", sharedData?.SK],
-    queryFn: () =>
-      useGetRequest(
+    queryFn: async () => {
+      const response = await useGetRequest(
         sharedData?.SK,
         "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises"
-      ),
-    enabled: !!sharedData?.SK,
+      );
+      return { ...response, body: JSON.parse(response.body) };
+    },
   });
-
-  if (!isLoading) {
-    data.body = JSON.parse(data.body);
-    console.log(data.body);
-  }
 
   return isLoading ? (
     <div> Loading..</div>
   ) : (
     <div className="w-full h-full flex justify-center items-center  flex-col">
       <h1 className="text-2xl font-bold mb-4">View Workout</h1>
+      <h2 onClick={() => navigate("/workout")}> Go Back</h2>
+
       <button onClick={handleAddExercise}>Add New Exercise</button>
       <Modal />
       <div className="flex">

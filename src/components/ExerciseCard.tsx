@@ -39,12 +39,13 @@ export default function WorkoutCard({
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["exercises", PK],
-    queryFn: () =>
-      useGetRequest(
+    queryFn: async () => {
+      const response = await useGetRequest(
         PK,
         "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets"
-      ),
-    enabled: !!PK,
+      );
+      return { ...response, body: JSON.parse(response.body) };
+    },
   });
 
   const handlePostSave = () => {
@@ -70,10 +71,6 @@ export default function WorkoutCard({
       });
     });
   };
-
-  if (!isLoading) {
-    data.body = JSON.parse(data.body);
-  }
 
   const [repsInputs, setRepsInputs] = useState<string[]>(
     Array.from({ length: sets }, () => "")

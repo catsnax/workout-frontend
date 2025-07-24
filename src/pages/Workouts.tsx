@@ -5,6 +5,7 @@ import AddWorkoutForm from "../components/AddWorkoutForm";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { Workout } from "../types/WorkoutType.ts";
+import useGetRequest from "../hooks/useGetRequest.ts";
 
 function Workout() {
   const open = useModalStore((state) => state.open);
@@ -13,7 +14,6 @@ function Workout() {
   };
 
   const setSharedData = useDataStore((state) => state.setSharedData);
-  setSharedData({ SK: "hello" });
 
   const navigate = useNavigate();
   const handleNavigate = (body: Workout) => {
@@ -22,35 +22,27 @@ function Workout() {
   };
 
   const pk = localStorage.getItem("PK");
-  const fetchWorkouts = async (pk: string) => {
-    const res = await fetch(
-      `https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts?pk=${encodeURIComponent(
-        pk
-      )}`
-    );
-    if (!res.ok) throw new Error("Failed to fetch workouts");
-    const data = await res.json();
-    return data;
-  };
 
   if (!pk) {
     return <div>Please log in to view workouts.</div>;
   }
   const { data, isLoading, error } = useQuery({
     queryKey: ["workouts", pk],
-    queryFn: () => fetchWorkouts(pk),
-    enabled: !!pk,
+    queryFn: async () => {
+      const response = await useGetRequest(
+        pk,
+        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts"
+      );
+      return { ...response, body: JSON.parse(response.body) };
+    },
   });
-  if (!isLoading) {
-    data.body = JSON.parse(data.body);
-  }
 
   return isLoading ? (
     <div> Loading..</div>
   ) : (
     <div className="w-full h-full flex justify-center items-center">
       <div className="flex flex-col ">
-        <Modal />
+        <h2 onClick={() => navigate("/login")}> Log Out</h2> <Modal />
         <div className="flex flex-col">
           <button
             onClick={handleAddWorkout}
