@@ -26,7 +26,12 @@ function Login() {
       const parsedBody = JSON.parse(data.data.body);
       localStorage.setItem("PK", parsedBody.PK);
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      navigate("/workout");
+      console.log(data);
+      if (data.data.statusCode == 200) {
+        navigate("/workout");
+      } else {
+        alert("Invalid Credentials");
+      }
     },
   });
 
