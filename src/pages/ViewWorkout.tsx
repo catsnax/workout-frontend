@@ -14,15 +14,14 @@ function ViewWorkout() {
     open(<AddExerciseForm SK={sharedData?.SK} />);
   };
 
+  const url = import.meta.env.VITE_AWS_URL;
+
   const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
     queryKey: ["exercises", sharedData?.SK],
     queryFn: async () => {
-      const response = await useGetRequest(
-        sharedData?.SK,
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises"
-      );
+      const response = await useGetRequest(sharedData?.SK, `${url}/exercises`);
       return { ...response, body: JSON.parse(response.body) };
     },
   });

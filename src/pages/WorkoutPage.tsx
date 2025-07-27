@@ -18,6 +18,8 @@ function WorkoutPage() {
     open(<AddWorkoutForm />);
   };
 
+  const url = import.meta.env.VITE_AWS_URL;
+
   const setSharedData = useDataStore((state) => state.setSharedData);
 
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ function WorkoutPage() {
   };
 
   const deleteWorkout = useDeleteRequest<{ pk: string; sk: string }>(
-    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts",
+    `${url}/workouts`,
     ["workouts"]
   );
 
@@ -39,7 +41,7 @@ function WorkoutPage() {
   }
 
   const filterWorkout = usePatchRequest<{ PK: string; targetDay: string }>(
-    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts",
+    `${url}/workouts`,
     ["workouts"]
   );
 
@@ -65,10 +67,7 @@ function WorkoutPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["workouts", pk],
     queryFn: async () => {
-      const response = await useGetRequest(
-        pk,
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts"
-      );
+      const response = await useGetRequest(pk, `${url}/workouts`);
       return { ...response, body: JSON.parse(response.body) };
     },
   });

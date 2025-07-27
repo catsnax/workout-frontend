@@ -32,28 +32,20 @@ export default function ExerciseCard({
 
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing(!isEditing);
+  const url = import.meta.env.VITE_AWS_URL;
 
-  const createSet = usePostRequest<NewSet>(
-    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets",
-    ["sets"]
-  );
-  const patchSet = usePatchRequest<NewSet>(
-    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets",
-    ["sets"]
-  );
+  const createSet = usePostRequest<NewSet>(`${url}/sets`, ["sets"]);
+  const patchSet = usePatchRequest<NewSet>(`${url}/sets`, ["sets"]);
 
   const deleteExercise = useDeleteRequest<{ pk: string; sk: string }>(
-    "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises",
+    `${url}/exercises`,
     ["exercises"]
   );
 
   const { data, isLoading } = useQuery({
     queryKey: ["exercises", PK],
     queryFn: async () => {
-      const response = await useGetRequest(
-        PK,
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/sets"
-      );
+      const response = await useGetRequest(PK, `${url}/sets`);
       return { ...response, body: JSON.parse(response.body) };
     },
   });

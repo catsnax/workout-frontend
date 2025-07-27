@@ -10,6 +10,8 @@ type AddExerciseFormProps = {
 export default function AddExerciseForm({ SK }: AddExerciseFormProps) {
   const { close } = useModalStore();
   const queryClient = useQueryClient();
+  const url = import.meta.env.VITE_AWS_URL;
+
   const mutation = useMutation({
     mutationFn: (newWorkout: {
       PK: string;
@@ -17,11 +19,7 @@ export default function AddExerciseForm({ SK }: AddExerciseFormProps) {
       numberOfSets: string;
       weight: string;
       unitMeasurement: string;
-    }) =>
-      axios.post(
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/exercises",
-        newWorkout
-      ),
+    }) => axios.post(`${url}/exercises`, newWorkout),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["exercises"] });
       close();

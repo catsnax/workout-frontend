@@ -12,6 +12,8 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
 
+  const url = import.meta.env.VITE_AWS_URL;
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -19,11 +21,7 @@ function Signup() {
       username: string;
       password: string;
       emailAddress: string;
-    }) =>
-      axios.post(
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/users",
-        newUser
-      ),
+    }) => axios.post(`${url}/users`, newUser),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },

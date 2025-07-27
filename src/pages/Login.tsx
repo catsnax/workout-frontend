@@ -12,15 +12,13 @@ function Login() {
 
   const queryClient = useQueryClient();
 
+  const url = import.meta.env.VITE_AWS_URL;
+
   const mutation = useMutation({
     mutationFn: (loginUser: { username: string; password: string }) =>
-      axios.post(
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/login",
-        loginUser,
-        {
-          withCredentials: true,
-        }
-      ),
+      axios.post(`${url}/login`, loginUser, {
+        withCredentials: true,
+      }),
 
     onSuccess: (data) => {
       const parsedBody = JSON.parse(data.data.body);

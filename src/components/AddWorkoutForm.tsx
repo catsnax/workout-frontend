@@ -6,6 +6,7 @@ import { useModalStore } from "../store/modalStore";
 export default function AddWorkoutForm() {
   const queryClient = useQueryClient();
   const { close } = useModalStore();
+  const url = import.meta.env.VITE_AWS_URL;
 
   const mutation = useMutation({
     mutationFn: (newWorkout: {
@@ -13,11 +14,7 @@ export default function AddWorkoutForm() {
       targetDay: string;
       location: string;
       date: string;
-    }) =>
-      axios.post(
-        "https://rntibe12r1.execute-api.us-east-1.amazonaws.com/workouts",
-        newWorkout
-      ),
+    }) => axios.post(`${url}/workouts`, newWorkout),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["workouts"] });
       close();
